@@ -1,6 +1,4 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import { EditModeProvider } from "@/contexts/EditModeContext";
 
@@ -9,23 +7,25 @@ export default async function PortalLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-
-  const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
-  const isAdmin = user?.role === "ADMIN";
+  const user = null;
+  const isAdmin = false;
 
   // カスタムセクション一覧を取得してサイドバーに渡す
-  const customSections = await prisma.contentSection.findMany({
-    where: { hidden: false },
-    orderBy: { order: "asc" },
-    include: {
-      pages: {
-        orderBy: { order: "asc" },
-        include: { files: { select: { id: true, isDraft: true } } },
+  let customSections = [];
+  try {
+    customSections = await prisma.contentSection.findMany({
+      where: { hidden: false },
+      orderBy: { order: "asc" },
+      include: {
+        pages: {
+          orderBy: { order: "asc" },
+          include: { files: { select: { id: true, isDraft: true } } },
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("Failed to load custom sections:", error);
+  }
 
   const sectionItems = customSections
     .map((s) => {

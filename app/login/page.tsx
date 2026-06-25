@@ -1,10 +1,14 @@
 import { signIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { getAuthSettings } from "@/lib/auth-settings";
 
 export default async function LoginPage() {
   const session = await auth();
+  const { authRequired } = await getAuthSettings();
+
   if (session?.user) redirect("/");
+  if (!authRequired) redirect("/announcements");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">

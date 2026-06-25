@@ -1,32 +1,57 @@
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import Header from "@/components/layout/Header";
+import Link from "next/link";
+import AnnouncementList from "../announcements/AnnouncementList";
 import { EditModeGate } from "@/components/layout/EditModeGate";
-import HelpdeskNavigator from "./HelpdeskNavigator";
-import HelpdeskTreeEditor from "./HelpdeskTreeEditor";
 
-export default function HelpdeskPage() {
+export default async function HelpdeskPage() {
+  const session = await auth();
+  const user = session?.user?.email
+    ? await prisma.user.findUnique({ where: { email: session.user.email } })
+    : null;
+  const isAdmin = user?.role === "ADMIN";
+
+  const announcements = await prisma.announcement.findMany({
+    where: isAdmin ? {} : { isDraft: false },
+    orderBy: [{ important: "desc" }, { publishedAt: "desc" }],
+  });
+
   return (
     <>
-      <Header title="ヘルプデスク" />
-      <main className="flex-1 p-6 max-w-5xl space-y-8">
-
-        {/* ユーザー向けナビゲーター */}
-        <section>
-          <HelpdeskNavigator />
-        </section>
-
-        {/* 管理者向けツリーエディタ（編集モード時のみ） */}
-        <EditModeGate>
-          <section className="border-t pt-8">
-            <div className="mb-4">
-              <h2 className="text-base font-bold text-gray-700">ツリー編集</h2>
-              <p className="text-xs text-gray-400 mt-0.5">
-                ノードを追加・編集・削除してヘルプデスクの案内ツリーを構成します。最大10階層まで設定できます。
-              </p>
+      <Header title="お知らせ" />
+      <main className="flex-1 pt-6 px-6 pb-0 overflow-hidden flex flex-col min-h-0">
+        <div className="flex-1 overflow-auto flex flex-col gap-6">
+          {/* お知らせ セクション */}
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-[#AAAAAA] text-sm">{announcements.length}件のお知らせ</p>
+              <EditModeGate>
+                <Link
+                  href="/announcements/new"
+                  className="bg-[#0067B8] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#005a9e] transition-colors flex items-center gap-2"
+                >
+                  <span>+</span> お知らせを投稿
+                </Link>
+              </EditModeGate>
             </div>
-            <HelpdeskTreeEditor />
-          </section>
-        </EditModeGate>
-
+            <AnnouncementList
+              isAdmin={isAdmin}
+              announcements={announcements.map((a: typeof announcements[number]) => ({
+                id: a.id,
+                title: a.title,
+                content: a.content,
+                summary: a.summary,
+                category: a.category,
+                organization: a.organization,
+                important: a.important,
+                isDraft: a.isDraft,
+                slackSent: a.slackSent,
+                publishedAt: a.publishedAt.toISOString(),
+              }))}
+            />
+          </div>
+        </div>
       </main>
     </>
   );

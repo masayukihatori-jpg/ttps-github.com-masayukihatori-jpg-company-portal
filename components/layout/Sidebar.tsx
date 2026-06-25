@@ -8,8 +8,8 @@ import { useEditMode } from "@/contexts/EditModeContext";
 
 /* ── ナビ項目定義（表示順） ── */
 const NAV_ITEMS = [
-  { href: "/helpdesk",           label: "ヘルプデスク", Icon: HelpdeskIcon, activePrefix: "/helpdesk" },
-  { href: "/announcements",      label: "お知らせ",     Icon: NewsIcon,     activePrefix: "/announcements" },
+  { href: "/helpdesk",           label: "お知らせ",     Icon: HelpdeskIcon, activePrefix: "/helpdesk" },
+  { href: "/announcements",      label: "ヘルプデスク", Icon: NewsIcon,     activePrefix: "/announcements" },
   { href: "/company-info/basic", label: "会社情報",     Icon: CompanyIcon,  activePrefix: "/company-info" },
   { href: "/regulations",        label: "規程",         Icon: RegIcon,      activePrefix: "/regulations" },
   { href: "/manual",             label: "マニュアル",   Icon: ManualIcon,   activePrefix: "/manual" },
@@ -21,6 +21,7 @@ const ADMIN_NAV_ITEMS = [
   { href: "/master/announcement-categories",  label: "お知らせカテゴリ",     Icon: MasterIcon },
   { href: "/master/content-sections",         label: "カスタムセクション",   Icon: MasterIcon },
   { href: "/admin/helpdesk-logs",             label: "ヘルプデスク履歴",     Icon: MasterIcon },
+  { href: "/admin/settings",                  label: "システム設定",         Icon: MasterIcon },
 ];
 
 /* ── アイコン SVG ── */

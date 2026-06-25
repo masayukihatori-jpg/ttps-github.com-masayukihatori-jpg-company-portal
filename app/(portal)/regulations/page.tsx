@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import Header from "@/components/layout/Header";
 import RegulationList from "./RegulationList";
 
+export const dynamic = 'force-dynamic';
+
 export default async function RegulationsPage() {
   const categories = await prisma.regulationCategory.findMany({
     orderBy: { order: "asc" },
