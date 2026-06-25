@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Zen_Kaku_Gothic_New, Oswald } from "next/font/google";
 import "./globals.css";
-import SessionProvider from "@/components/SessionProvider";
 
 const zenKaku = Zen_Kaku_Gothic_New({
   variable: "--font-zen-kaku",
@@ -28,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="ja" className={`${zenKaku.variable} ${oswald.variable} h-full antialiased`}>
       <body className="min-h-full bg-[#EFF2F4] font-zen text-[#192E61]">
-        <SessionProvider>{children}</SessionProvider>
+        {children}
       </body>
     </html>
   );

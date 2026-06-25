@@ -1,12 +1,9 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useEditMode } from "@/contexts/EditModeContext";
 import { useState } from "react";
 
 export default function Header({ title }: { title: string }) {
-  const { data: session } = useSession();
   const { isAdmin, isEditMode, enterEditMode, discardAndExit, saveAndExit } = useEditMode();
   const [saving, setSaving] = useState(false);
 
@@ -70,33 +67,6 @@ export default function Header({ title }: { title: string }) {
           </div>
         )}
 
-        {/* ユーザー情報 */}
-        {session?.user && (
-          <div className="flex items-center gap-3">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-[#192E61]">{session.user.name}</p>
-              <p className="text-xs text-[#888888]">
-                {(session.user as any).department ?? session.user.email}
-              </p>
-            </div>
-            {session.user.image ? (
-              <Image
-                src={session.user.image}
-                alt={session.user.name ?? ""}
-                width={34}
-                height={34}
-                className="rounded-full"
-              />
-            ) : (
-              <div
-                className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-white text-sm font-bold"
-                style={{ background: "linear-gradient(54deg, #0061b3 0%, #0089d0 100%)" }}
-              >
-                {session.user.name?.charAt(0) ?? "?"}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </header>
   );
