@@ -41,7 +41,7 @@ export default async function AnnouncementsPage() {
             </div>
             <AnnouncementList
               isAdmin={isAdmin}
-              announcements={announcements.map((a) => ({
+              announcements={announcements.map((a: typeof announcements[number]) => ({
                 id: a.id,
                 title: a.title,
                 content: a.content,

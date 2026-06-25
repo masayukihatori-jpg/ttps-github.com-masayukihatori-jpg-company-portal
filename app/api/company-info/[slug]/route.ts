@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getPageMeta } from "@/lib/company-info";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 // ページ取得（なければ自動作成）
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
