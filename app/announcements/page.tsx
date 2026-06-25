@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Header from "@/components/layout/Header";
 import QAInterface from "@/components/qa/QAInterface";
 
+export const dynamic = 'force-dynamic';
+
 export default function AnnouncementsPage() {
   const [userId, setUserId] = useState<string | null>(null);
 
