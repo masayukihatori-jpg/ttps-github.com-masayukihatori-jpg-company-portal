@@ -1,19 +1,23 @@
-import Header from "@/components/layout/Header";
+'use client';
 
-export const dynamic = 'force-dynamic';
+import { useState, useEffect } from 'react';
+import Header from "@/components/layout/Header";
+import QAInterface from "@/components/qa/QAInterface";
 
 export default function AnnouncementsPage() {
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // テスト用のダミーユーザーID
+    setUserId('test-user-' + Math.random().toString(36).substr(2, 9));
+  }, []);
+
   return (
     <>
       <Header title="ヘルプデスク" />
       <main className="flex-1 pt-6 px-6 pb-0 overflow-hidden flex flex-col min-h-0">
         <div className="flex-1 overflow-auto flex flex-col gap-6">
-          <div className="bg-white rounded-lg border border-[#EEEEEE] p-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">マニュアル検索・Q&A</h2>
-            <p className="text-gray-600">
-              社内規程やマニュアルについての質問に、AI がお答えします。
-            </p>
-          </div>
+          {userId && <QAInterface userId={userId} />}
         </div>
       </main>
     </>
