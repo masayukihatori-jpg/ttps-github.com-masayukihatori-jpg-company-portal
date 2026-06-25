@@ -2,9 +2,7 @@
   "buildCommand": "next build",
   "ignoreCommand": "git diff --quiet HEAD~ HEAD -- .",
   "env": {
-    "NODE_OPTIONS": "--max_old_space_size=4096"
-  },
-  "env_if_commit": {
+    "NODE_OPTIONS": "--max_old_space_size=4096",
     "NODE_ENV": "production"
   }
 }
