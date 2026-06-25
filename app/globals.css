@@ -1,26 +1,79 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
+/* AlbaLink ブランドカラー */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand-primary: #0067B8;
+  --brand-accent: #1494D6;
+  --brand-light: #66D0EB;
+  --brand-bg: #E2EDF5;
+  --brand-bg-light: #EFF2F4;
+  --brand-gradient: linear-gradient(54deg, #0061b3 0%, #0089d0 54.86%, #008bd2 100%);
+  --brand-gradient-cta: linear-gradient(54deg, #df2872 0%, #dc614b 54.86%, #ec8729 100%);
+  --brand-highlight: #FFF970;
+
+  --text-body: #192E61;
+  --text-sub: #555555;
+  --text-placeholder: #888888;
+  --text-inactive: #AAAAAA;
+  --border: #DDDDDD;
+  --border-light: #EEEEEE;
+  --white: #FFFFFF;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: var(--brand-bg-light);
+  --color-foreground: var(--text-body);
+  --font-zen: var(--font-zen-kaku), "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  --font-oswald: var(--font-oswald), sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--brand-bg-light);
+  color: var(--text-body);
+  font-family: var(--font-zen-kaku), "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
 }
+
+/* 数字・英字はOswaldを適用 */
+.font-oswald,
+.font-number {
+  font-family: var(--font-oswald), sans-serif;
+}
+
+/* ブランドボタン */
+.btn-brand {
+  background: var(--brand-gradient);
+  color: white;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.btn-brand:hover { opacity: 0.9; }
+
+.btn-brand-cta {
+  background: var(--brand-gradient-cta);
+  color: white;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.btn-brand-cta:hover { opacity: 0.9; }
+
+/* Tiptap エディター */
+.ProseMirror {
+  outline: none;
+  min-height: 200px;
+}
+.ProseMirror h2 { font-size: 1.1rem; font-weight: 700; margin: 0.8em 0 0.4em; }
+.ProseMirror h3 { font-size: 1rem; font-weight: 600; margin: 0.6em 0 0.3em; }
+.ProseMirror ul { list-style: disc; padding-left: 1.25rem; }
+.ProseMirror ol { list-style: decimal; padding-left: 1.25rem; }
+.ProseMirror p { margin: 0.25em 0; }
+.ProseMirror mark { background-color: #FEF08A; padding: 0 2px; border-radius: 2px; }
+
+/* スクロールバー */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--brand-bg-light); }
+::-webkit-scrollbar-thumb { background: #CCCCCC; border-radius: 3px; }

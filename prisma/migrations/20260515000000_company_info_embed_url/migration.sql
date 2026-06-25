@@ -1,0 +1,1 @@
+ALTER TABLE "CompanyInfoPage" ADD COLUMN IF NOT EXISTS "embedUrl" TEXT;
