@@ -15,7 +15,7 @@ export default async function HelpdeskLogsPage() {
     include: { user: { select: { name: true, email: true } } },
   });
 
-  const rows: LogRow[] = logs.map((log) => ({
+  const rows: LogRow[] = logs.map((log: typeof logs[number]) => ({
     id: log.id,
     createdAt: log.createdAt.toISOString(),
     userName: log.user.name ?? log.user.email ?? "",
