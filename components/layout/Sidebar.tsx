@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { useEditMode } from "@/contexts/EditModeContext";
 
 /* ── ナビ項目定義（表示順） ── */
@@ -271,7 +270,7 @@ export default function Sidebar({
       {/* ログアウト */}
       <div className="p-3 border-t border-[#EEEEEE]">
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
+          onClick={() => {}}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#888888] hover:bg-[#EFF2F4] hover:text-[#555555] w-full transition-all"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
