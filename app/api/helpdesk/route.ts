@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Anthropic from "@anthropic-ai/sdk";
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+  const isAdmin = false;
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 
   const { question } = await request.json() as { question: string };
   if (!question?.trim()) return NextResponse.json({ error: "質問を入力してください" }, { status: 400 });

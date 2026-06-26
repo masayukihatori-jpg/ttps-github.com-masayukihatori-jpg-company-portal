@@ -1,11 +1,9 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthenticationRequired } from "@/lib/auth-settings";
 
 export async function GET() {
-  const session = await auth();
-  const user = await prisma.user.findUnique({
+  const isAdmin = false;
+    const user = await prisma.user.findUnique({
     where: { email: session?.user?.email! },
   });
 
@@ -17,8 +15,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  const user = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
     where: { email: session?.user?.email! },
   });
 

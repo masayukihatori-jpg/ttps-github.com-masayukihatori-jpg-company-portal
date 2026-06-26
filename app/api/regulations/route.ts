@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeFile, mkdir, readFile } from "fs/promises";
 import path from "path";
@@ -32,8 +31,8 @@ async function extractPdfText(filePath: string): Promise<string> {
 
 // 規程一覧（カテゴリ付き）
 export async function GET() {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+  const isAdmin = false;
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 
   const categories = await prisma.regulationCategory.findMany({
     orderBy: { order: "asc" },
@@ -44,8 +43,7 @@ export async function GET() {
 
 // 規程（PDF）アップロード
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
   const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
   if (!user || user.role !== "ADMIN") return NextResponse.json({ error: "権限がありません" }, { status: 403 });
 

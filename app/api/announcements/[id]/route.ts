@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendSlackNotification } from "@/lib/slack";
 import { summarizeAnnouncement } from "@/lib/summarize";
@@ -9,13 +8,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
-  const isAdmin = user?.role === "ADMIN";
+  const isAdmin = false;
 
   const { id } = await params;
   const announcement = await prisma.announcement.findUnique({
@@ -47,17 +40,6 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email! },
-  });
-  if (!user || user.role !== "ADMIN") {
-    return NextResponse.json({ error: "編集権限がありません" }, { status: 403 });
-  }
 
   const { id } = await params;
   const body = await request.json();
@@ -119,17 +101,6 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email! },
-  });
-  if (!user || user.role !== "ADMIN") {
-    return NextResponse.json({ error: "削除権限がありません" }, { status: 403 });
-  }
 
   const { id } = await params;
   await prisma.announcement.delete({ where: { id } });

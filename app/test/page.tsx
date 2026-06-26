@@ -1,7 +1,5 @@
-import { getAuthenticationRequired } from "@/lib/auth-settings";
-
 export default async function TestPage() {
-  const authRequired = getAuthenticationRequired();
+  const authRequired = false;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">

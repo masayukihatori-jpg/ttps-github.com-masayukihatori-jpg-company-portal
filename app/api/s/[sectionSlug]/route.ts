@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 type Params = { params: Promise<{ sectionSlug: string }> };
 
 // セクション情報取得（ページ一覧含む）
 export async function GET(_req: NextRequest, { params }: Params) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+  const isAdmin = false;
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 
   const { sectionSlug } = await params;
   const section = await prisma.contentSection.findUnique({
@@ -21,8 +20,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
 // セクション情報更新（名前・順序）
 export async function PATCH(request: NextRequest, { params }: Params) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
   const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
   if (!user || user.role !== "ADMIN") return NextResponse.json({ error: "権限がありません" }, { status: 403 });
 
@@ -44,8 +42,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 
 // セクション削除
 export async function DELETE(_req: NextRequest, { params }: Params) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
   const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
   if (!user || user.role !== "ADMIN") return NextResponse.json({ error: "権限がありません" }, { status: 403 });
 

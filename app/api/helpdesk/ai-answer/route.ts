@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import Anthropic from "@anthropic-ai/sdk";
@@ -21,8 +20,8 @@ function stripHtml(html: string): string {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+  const isAdmin = false;
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {

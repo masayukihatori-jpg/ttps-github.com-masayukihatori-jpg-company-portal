@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
@@ -8,8 +7,8 @@ type Params = { params: Promise<{ sectionSlug: string; pageSlug: string }> };
 
 // ページ取得
 export async function GET(_req: NextRequest, { params }: Params) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+  const isAdmin = false;
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 
   const { sectionSlug, pageSlug } = await params;
   const section = await prisma.contentSection.findUnique({ where: { slug: sectionSlug } });
@@ -26,8 +25,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
 // ページ更新（下書き保存 or 公開）
 export async function PATCH(request: NextRequest, { params }: Params) {
-  const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+    if (!session?.user) return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
   const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
   if (!user || user.role !== "ADMIN") return NextResponse.json({ error: "権限がありません" }, { status: 403 });
 

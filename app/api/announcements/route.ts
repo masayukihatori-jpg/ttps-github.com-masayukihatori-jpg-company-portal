@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendSlackNotification } from "@/lib/slack";
 import { summarizeAnnouncement } from "@/lib/summarize";
 
 // お知らせ一覧取得
 export async function GET(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
-  const isAdmin = user?.role === "ADMIN";
+  const isAdmin = false;
 
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") ?? "1");
@@ -45,21 +38,6 @@ export async function GET(request: NextRequest) {
 
 // お知らせ新規作成
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
-  }
-
-  // 管理者チェック
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email! },
-  });
-  if (!user || user.role !== "ADMIN") {
-    return NextResponse.json(
-      { error: "投稿権限がありません（管理者のみ）" },
-      { status: 403 }
-    );
-  }
 
   const body = await request.json();
   const { title, content, category, important, organization, isDraft } = body;
@@ -90,7 +68,7 @@ export async function POST(request: NextRequest) {
       organization: organization ?? "",
       important: important ?? false,
       isDraft: isDraft ?? false,
-      authorId: user.id,
+      authorId: null,
     },
     include: {
       author: { select: { name: true } },
