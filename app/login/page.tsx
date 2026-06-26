@@ -1,6 +1,14 @@
-import { redirect } from "next/navigation";
+'use client';
 
-export default async function LoginPage() {
-  redirect("/announcements");
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
+export default function LoginPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/announcements');
+  }, [router]);
+
+  return null;
 }
