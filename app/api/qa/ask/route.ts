@@ -63,7 +63,7 @@ ${searchContent}
     // データベースに保存
     const newQuestion = await prisma.question.create({
       data: {
-        userId: user.id,
+        userId,
         question,
         status: "AI_ANSWERED",
         answers: {
