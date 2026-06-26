@@ -15,7 +15,7 @@ export default async function CompanyInfoPage({
   const meta = getPageMeta(slug);
   if (!meta) notFound();
 
-  const isAdmin = user?.role === "ADMIN";
+  const isAdmin = false;
 
   // ページデータ取得（なければ自動作成）
   let page = await prisma.companyInfoPage.findUnique({
@@ -68,7 +68,7 @@ export default async function CompanyInfoPage({
             isDraft: f.isDraft,
           }))}
           updatedAt={page.updatedAt.toISOString()}
-          currentUserId={user?.id ?? ""}
+          currentUserId=""
           draftAuthorId={page.draftAuthorId ?? null}
           draftContent={page.draftContent ?? null}
           draftEmbedUrl={page.draftEmbedUrl ?? null}

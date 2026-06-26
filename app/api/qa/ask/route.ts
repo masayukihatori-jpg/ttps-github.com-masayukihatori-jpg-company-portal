@@ -60,26 +60,31 @@ ${searchContent}
       response.content[0].type === "text" ? response.content[0].text : "";
     console.log("Answer:", answerText);
 
-    // データベースに保存
-    const newQuestion = await prisma.question.create({
-      data: {
-        userId,
-        question,
-        status: "AI_ANSWERED",
-        answers: {
-          create: {
-            answerText,
-            sourceUrls: JSON.stringify([]),
-            aiModel: "claude",
-          },
-        },
-      },
-      include: {
-        answers: true,
-      },
-    });
+    // データベースに保存（直接 SQL で userId を NULL として保存）
+    const questionId = Math.random().toString(36).substr(2, 9);
+    
+    await prisma.$executeRawUnsafe(
+      `INSERT INTO "Question" (id, "userId", question, status, "updatedAt") VALUES ($1, NULL, $2, $3, NOW())`,
+      questionId,
+      question,
+      'AI_ANSWERED'
+    );
 
-    return NextResponse.json({ question: newQuestion, answer: answerText });
+    // 回答を保存
+    const answerId = Math.random().toString(36).substr(2, 9);
+    await prisma.$executeRawUnsafe(
+      `INSERT INTO "Answer" (id, "questionId", "answerText", "sourceUrls", "aiModel") VALUES ($1, $2, $3, $4, $5)`,
+      answerId,
+      questionId,
+      answerText,
+      JSON.stringify([]),
+      'claude'
+    );
+
+    return NextResponse.json({ 
+      question: { id: questionId, question }, 
+      answer: answerText 
+    });
   } catch (error) {
     console.error("Error in /api/qa/ask:", error);
     const errorMessage = error instanceof Error ? error.message : String(error);

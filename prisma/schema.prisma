@@ -314,8 +314,8 @@ model ManualPage {
 // ユーザーの質問
 model Question {
   id          String    @id @default(cuid())
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   question    String    @db.Text
   status      String    @default("NEW") // NEW, AI_ANSWERED, FOLLOWUP, ESCALATED, VERIFYING, MANAGER_REPLY, CLOSED
   retryCount  Int       @default(0)
