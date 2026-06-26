@@ -1,16 +1,8 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import Header from "@/components/layout/Header";
 import UserManager from "./UserManager";
 
 export default async function UsersPage() {
-  const session = await auth();
-  const me = await prisma.user.findUnique({ where: { email: session?.user?.email! } });
-
-  // 管理者以外はアクセス不可
-  if (!me || me.role !== "ADMIN") redirect("/announcements");
-
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "asc" },
     select: {
@@ -35,7 +27,7 @@ export default async function UsersPage() {
             role: u.role as string,
             createdAt: u.createdAt.toISOString(),
           }))}
-          myId={me.id}
+          myId=""
         />
       </main>
     </>

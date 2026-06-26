@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Header from "@/components/layout/Header";
 import SectionPageEditor from "@/components/content-section/SectionPageEditor";
@@ -13,7 +12,6 @@ export default async function ContentSectionPage({
 }) {
   const { sectionSlug, pageSlug } = await params;
 
-  const session = await auth();
   const currentUser = session?.user?.email
     ? await prisma.user.findUnique({ where: { email: session.user.email } })
     : null;

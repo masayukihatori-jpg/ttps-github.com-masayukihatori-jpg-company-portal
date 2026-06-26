@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Header from "@/components/layout/Header";
 import Link from "next/link";
@@ -12,7 +11,6 @@ export default async function ManualPageView({
   params: Promise<{ categoryId: string; sectionId: string; pageId: string }>;
 }) {
   const { categoryId, sectionId, pageId } = await params;
-  const session = await auth();
   const [user, page] = await Promise.all([
     prisma.user.findUnique({ where: { email: session?.user?.email! } }),
     prisma.manualPage.findUnique({

@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { getPageMeta } from "@/lib/company-info";
@@ -16,8 +15,6 @@ export default async function CompanyInfoPage({
   const meta = getPageMeta(slug);
   if (!meta) notFound();
 
-  const session = await auth();
-  const user = await prisma.user.findUnique({ where: { email: session?.user?.email! } });
   const isAdmin = user?.role === "ADMIN";
 
   // ページデータ取得（なければ自動作成）

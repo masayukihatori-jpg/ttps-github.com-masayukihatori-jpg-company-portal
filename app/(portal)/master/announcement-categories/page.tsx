@@ -1,14 +1,9 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Header from "@/components/layout/Header";
 import AnnouncementCategoryManager from "./AnnouncementCategoryManager";
 
 export default async function AnnouncementCategoriesPage() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-  const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
-  if (!user || user.role !== "ADMIN") redirect("/announcements");
   const categories = await prisma.announcementCategoryMaster.findMany({ orderBy: { order: "asc" } });
   return (
     <>

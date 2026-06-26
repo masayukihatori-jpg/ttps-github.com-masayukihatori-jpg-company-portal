@@ -1,14 +1,9 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Header from "@/components/layout/Header";
 import ContentSectionManager from "./ContentSectionManager";
 
 export default async function ContentSectionsPage() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-  const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
-  if (!user || user.role !== "ADMIN") redirect("/announcements");
 
   const sections = await prisma.contentSection.findMany({
     orderBy: { order: "asc" },

@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Header from "@/components/layout/Header";
 import Link from "next/link";
@@ -12,8 +11,6 @@ export default async function ManualCategoryPage({
   params: Promise<{ categoryId: string }>;
 }) {
   const { categoryId } = await params;
-  const session = await auth();
-  const user = await prisma.user.findUnique({ where: { email: session?.user?.email! } });
   const isAdmin = user?.role === "ADMIN";
 
   const category = await prisma.manualCategory.findUnique({

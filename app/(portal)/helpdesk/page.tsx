@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Header from "@/components/layout/Header";
 import Link from "next/link";
@@ -6,14 +5,10 @@ import AnnouncementList from "../announcements/AnnouncementList";
 import { EditModeGate } from "@/components/layout/EditModeGate";
 
 export default async function HelpdeskPage() {
-  const session = await auth();
-  const user = session?.user?.email
-    ? await prisma.user.findUnique({ where: { email: session.user.email } })
-    : null;
-  const isAdmin = user?.role === "ADMIN";
+  const isAdmin = false;
 
   const announcements = await prisma.announcement.findMany({
-    where: isAdmin ? {} : { isDraft: false },
+    where: { isDraft: false },
     orderBy: [{ important: "desc" }, { publishedAt: "desc" }],
   });
 

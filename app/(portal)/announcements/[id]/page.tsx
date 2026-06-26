@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Header from "@/components/layout/Header";
 import Link from "next/link";
@@ -12,7 +11,6 @@ export default async function AnnouncementDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const session = await auth();
 
   const [announcement, user] = await Promise.all([
     prisma.announcement.findUnique({

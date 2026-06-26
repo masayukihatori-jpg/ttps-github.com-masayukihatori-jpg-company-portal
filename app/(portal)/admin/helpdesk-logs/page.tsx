@@ -1,14 +1,7 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import HelpdeskLogTable, { LogRow } from "./HelpdeskLogTable";
 
 export default async function HelpdeskLogsPage() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-  const user = await prisma.user.findUnique({ where: { email: session.user.email! } });
-  if (user?.role !== "ADMIN") redirect("/announcements");
-
   const logs = await prisma.helpdeskLog.findMany({
     orderBy: { createdAt: "desc" },
     take: 200,
