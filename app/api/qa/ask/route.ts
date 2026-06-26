@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Anthropic } from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,19 +6,7 @@ const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const { question } = await req.json();
+    const { question, userId } = await req.json();
     if (!question) {
       return NextResponse.json(
         { error: "Question is required" },

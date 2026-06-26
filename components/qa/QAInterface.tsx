@@ -21,7 +21,7 @@ export default function QAInterface({ userId }: { userId: string }) {
       const res = await fetch("/api/qa/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, userId }),
       });
 
       const data = await res.json();
@@ -53,6 +53,7 @@ export default function QAInterface({ userId }: { userId: string }) {
           questionId,
           followUpQuestion: followUpInput,
           feedback: "not_understood",
+          userId,
         }),
       });
 
